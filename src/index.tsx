@@ -5,6 +5,8 @@ import { store } from './app/store';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './index.scss';
+import { BrowserRouter, RouterProvider } from 'react-router-dom';
+import { router } from './router';
 
 const container = document.getElementById('root')!;
 const root = createRoot(container);
@@ -12,7 +14,8 @@ const root = createRoot(container);
 root.render(
     <React.StrictMode>
         <Provider store={store}>
-            <App />
+            <RouterProvider router={router} />
+            <App />            
         </Provider>
     </React.StrictMode>
 );
