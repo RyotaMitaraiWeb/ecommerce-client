@@ -1,4 +1,4 @@
-import { Box, CssBaseline, PaletteMode, ThemeProvider } from '@mui/material';
+import { CssBaseline, PaletteMode, ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import { useState, useMemo } from 'react';
 import './App.scss';
@@ -18,6 +18,7 @@ function App() {
             }
         }), [mode, palette]
     );
+    
 
     return (
         <ThemeProvider theme={theme}>
