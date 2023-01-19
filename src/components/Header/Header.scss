@@ -1,4 +1,12 @@
 #header {
     display: flex;
     justify-content: space-between;
+
+    .fa, label, input {
+        color: white;
+    }
+
+    label {
+        opacity: 0.9;
+    }
 }
