@@ -1,0 +1,35 @@
+#nav {
+    @media screen and (max-width: 780px) {
+        display: none;
+    }
+
+    .links {
+        list-style: none;
+        padding: 0;
+        padding-right: 15px;
+        text-align: right;
+
+        li {
+            display: inline-block;
+            margin-left: 24px;
+            a {
+                color: white;
+                text-decoration: none;
+                display: flex;
+                align-items: center;
+
+                .fa {
+                    margin-right: 4px;
+                }
+
+                &:hover {
+                    opacity: 0.7;
+                }
+
+                &:active {
+                    color: yellow;
+                }
+            }
+        }
+    }
+}
