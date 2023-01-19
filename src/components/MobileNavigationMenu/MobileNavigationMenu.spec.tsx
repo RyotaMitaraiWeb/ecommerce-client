@@ -59,4 +59,24 @@ describe('Mobile navigation component', () => {
         expect(logoutLink).toBeInTheDocument();
         expect(profileLink).toBeInTheDocument();
     });
+
+    it('Closes menu when a link is clicked', () => {
+        const home = screen.getByText(/Home/i);
+        act(() => {
+            fireEvent.click(home);
+        });
+
+        const mobileMenu = store.getState().menu;
+        expect(mobileMenu.open).toBe(false);
+    });
+
+    it('Closes menu when the Close button is clicked', () => {
+        const close = screen.getByText(/Close/i);
+        act(() => {
+            fireEvent.click(close);
+        });
+
+        const mobileMenu = store.getState().menu;
+        expect(mobileMenu.open).toBe(false);
+    });
 });
