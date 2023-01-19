@@ -1,0 +1,8 @@
+#mobile-menu-button {
+    width: 50px;
+    display: none;
+
+    @media screen and (max-width: 780px) {
+        display: block;
+    }
+}
