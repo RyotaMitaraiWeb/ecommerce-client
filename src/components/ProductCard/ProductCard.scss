@@ -1,0 +1,25 @@
+.card {
+    max-width: 400px;
+    margin-bottom: 1.5em;
+    display: block;
+    margin: 1em auto;
+
+    img {
+        object-fit: contain;
+        height: 300px;
+        margin-bottom: 1.5em;
+    }
+
+    .card-title {
+        text-align: center;
+    }
+
+    .actions {
+        display: flex; 
+        justify-content: center;
+    }
+}
+
+.no-results {
+    text-align: center;
+}
