@@ -29,6 +29,9 @@ export const environment = {
 You can use Create React App's ``NODENV`` variable to conditionally use each environment's properties, depending on whether the application is running in production or development stage.
 
 ## App structure
+### ``interfaces.ts``
+Exposes interfaces that are intended to be used throughout the application.
+
 
 ### ``router.tsx``
 Contains the route configurations and exports a Layout component that properly displays the outlet between the header and footer.
@@ -58,6 +61,23 @@ This function should be used when you need to dispatch an action outside of a co
 
 #### ``httpstatus.enum.ts``
 The HttpStatus enum provides an easy-to-use interface for status codes. This enum holds only status codes that have been used in the application at least once.
+
+## Useful components
+### Paginator
+```typescript
+interface IPaginator {
+    total: number;
+    endpoint: 'search' | 'all';
+}
+```
+The paginator component can be used on pages that display a list of products (like search results or a catalogue of all products). The component renders each page button as a hyperlink and also maintains all sort query strings if such are present in the URL.
+
+Each page holds up to six products. If ``total`` is less than ``7``, the paginator won't be displayed
+
+### Sorter
+The sorted component can be used on pages that display a list of products (like search results or a catalogue of all products). The component renders a select menu, which manipulates query strings related to sorting the products. It also maintains any ``name`` and ``page`` query strings that may be present in the URL.
+
+By default, the selected option is Name (Ascending). Currently, only name and price can be used to sort the products.
 
 ## License
 MIT
