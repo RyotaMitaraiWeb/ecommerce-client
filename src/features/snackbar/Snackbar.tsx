@@ -18,13 +18,14 @@ export default function SnackbarAlert() {
                 dispatch(closeSnackbar());
             }, 5000)
         }
-    }, [snackbar]);
+    }, [snackbar, dispatch]);
 
     return (
         <Snackbar
             anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
             open={snackbar.open}
             onClose={() => { dispatch(closeSnackbar()) }}
+            sx={{ whiteSpace: 'pre-line' }}
         >
             <Alert variant="filled"
                 sx={{ width: '100%' }}
