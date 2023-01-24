@@ -1,9 +1,15 @@
-import { createBrowserRouter, Outlet } from 'react-router-dom';
+import { createBrowserRouter, Outlet, redirect } from 'react-router-dom';
+import Login from './components/Authentication/Login';
+import Register from './components/Authentication/Register';
 import { Header } from './components/Header/Header';
 import { Home } from './components/Home/Home';
 import Results from './components/Results/Results';
+import { ISnackbar, openSnackbar } from './features/snackbar/snackbarSlice';
+import { resetUser } from './features/user/userSlice';
 import { IProductResults } from './interfaces';
-import { get } from './util/requests/requests';
+import { dispatchOutsideOfComponent } from './util/dispatchOutsideOfComponent';
+import { redirectViaStatus } from './util/requests/redirect';
+import { del, get } from './util/requests/requests';
 
 export default function Layout() {
     return (
@@ -28,6 +34,64 @@ export const router = createBrowserRouter([
                 element: <h1>About</h1>
             },
             {
+                path: 'login',
+                element: <Login />,
+                loader: () => {
+                    if (localStorage.getItem('accessToken')) {
+                        dispatchOutsideOfComponent<ISnackbar>(openSnackbar, {
+                            severity: 'error',
+                            message: 'You must be logged out to perform this action!',
+                        });
+
+                        return redirect('/');
+                    }
+
+                    return null;
+                }
+            },
+            {
+                path: 'register',
+                element: <Register />,
+                loader: () => {
+                    if (localStorage.getItem('accessToken')) {
+                        dispatchOutsideOfComponent<ISnackbar>(openSnackbar, {
+                            severity: 'error',
+                            message: 'You must be logged out to perform this action!',
+                        });
+
+                        return redirect('/');
+                    }
+
+                    return null;
+                }
+                
+            },
+            {
+                path: 'logout',
+                element: null,
+                loader: async () => {                    
+                    const { res, data } = await del('/user/logout');
+                    if (res.ok) {
+                        dispatchOutsideOfComponent<ISnackbar>(openSnackbar, {
+                            severity: 'success',
+                            message: 'Successfully logged out!',
+                        });
+
+                        dispatchOutsideOfComponent(resetUser);
+
+                        localStorage.removeItem('accessToken');
+                        return redirect('/');
+                    } else {
+                        dispatchOutsideOfComponent<ISnackbar>(openSnackbar, {
+                            severity: 'error',
+                            message: 'You must be logged out to perform this action!',
+                        });
+
+                        return redirectViaStatus(res.status, true);
+                    }
+                }
+            },
+            {
                 path: 'product',
                 children: [
                     {
@@ -49,7 +113,7 @@ export const router = createBrowserRouter([
 
                             const params = url.search;
 
-                            const { data } = await get('/product/all' + params);
+                            const { data } = await get<IProductResults>('/product/all' + params);
                             return data;
                         },
                         element: <Results endpoint="all" />
