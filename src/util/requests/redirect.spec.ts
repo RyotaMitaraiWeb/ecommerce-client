@@ -16,4 +16,14 @@ describe('redirect function', () => {
         const res = redirectViaStatus(HttpStatus.OK);
         expect(res).toBeNull();
     });
+
+    it('Returns a redirect for 401 errors when enabled', () => {
+        const res = redirectViaStatus(HttpStatus.UNAUTHORIZED, true);
+        expect(res?.status).toBe(302);
+    });
+
+    it('Returns null for 401 errors when not enabled', () => {
+        const res = redirectViaStatus(HttpStatus.UNAUTHORIZED);
+        expect(res).toBeNull();
+    });
 });

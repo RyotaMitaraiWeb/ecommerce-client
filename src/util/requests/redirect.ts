@@ -14,11 +14,13 @@ import { HttpStatus } from "../httpstatus.enum";
  * @param {number} status - status code of the response
  * @returns 
  */
-export function redirectViaStatus(status: number) {
+export function redirectViaStatus(status: number, redirectIfGuess = false) {
     if (status === HttpStatus.NOT_FOUND) {
         return redirect('/not-found');
     } else if (status === HttpStatus.FORBIDDEN) {
         return redirect('/');
+    } else if (status === HttpStatus.UNAUTHORIZED && redirectIfGuess) {
+        return redirect('/login');
     }
 
     return null;

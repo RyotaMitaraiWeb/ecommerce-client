@@ -51,12 +51,28 @@ async function request<T>(method: method, url: string = '', body?: any) {
 
     const res = await fetch(api + url, request);
 
-    const data: T = await res.json();
+    let data: T;
+    if (res.status !== HttpStatus.NO_CONTENT) {
+        data = await res.json()
+    } else {
+        data = {} as T;
+    }
 
     return { res, data };
 }
 
-export const get = request.bind(null, 'GET');
-export const post = request.bind(null, 'POST');
-export const put = request.bind(null, 'PUT');
-export const del = request.bind(null, 'DELETE');
+export function get<T>(url: string) {
+   return request<T>('GET', url);
+}
+
+export function post<T>(url: string, body?: any) {
+    return request<T>('POST', url, body);
+ }
+
+ export function put<T>(url: string, body?: any) {
+    return request<T>('PUT', url, body);
+ }
+
+ export function del<T>(url: string) {
+    return request<T>('DELETE', url);
+ }
