@@ -1,0 +1,25 @@
+.product {
+    .form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        
+        .field {
+            width: 500px;
+            margin-bottom: 1.2em;
+            @media screen and (max-width: 550px) {
+                max-width: 300px;
+            }
+        }
+
+        .submit {
+            font-size: 1.5rem;
+            display: flex;
+            line-height: 100%;
+            padding: 16px;
+            .fa {
+                margin-right: 4px;
+            }
+        }
+    }
+}

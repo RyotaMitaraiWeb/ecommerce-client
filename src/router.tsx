@@ -3,6 +3,7 @@ import Login from './components/Authentication/Login';
 import Register from './components/Authentication/Register';
 import { Header } from './components/Header/Header';
 import { Home } from './components/Home/Home';
+import CreateProduct from './components/Product/Create/CreateProduct';
 import Results from './components/Results/Results';
 import { ISnackbar, openSnackbar } from './features/snackbar/snackbarSlice';
 import { resetUser } from './features/user/userSlice';
@@ -141,6 +142,22 @@ export const router = createBrowserRouter([
                             return data;
                         },
                         element: <Results endpoint="search" />
+                    },
+                    {
+                        path: 'create',
+                        element: <CreateProduct />,
+                        loader: () => {
+                            if (!localStorage.getItem('accessToken')) {
+                                dispatchOutsideOfComponent<ISnackbar>(openSnackbar, {
+                                    severity: 'error',
+                                    message: 'You must be logged in to perform this action!',
+                                });
+        
+                                return redirect('/');
+                            }
+        
+                            return null;
+                        }
                     }
                 ]
             }

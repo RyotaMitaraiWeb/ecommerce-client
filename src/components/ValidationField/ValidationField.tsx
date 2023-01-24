@@ -8,17 +8,19 @@ import { ChangeEvent, ChangeEventHandler, useState } from "react";
     label: string;
     name: string;
     required?: requiredRule;
-    helperText: string;
+    helperText?: string;
     className?: string;
     minLength?: minLengthRule;
     maxLength?: maxLengthRule;
     pattern?: patternRule;
+    min?: minRule;
+    max?: maxRule;
     defaultValue?: string;
     type?: string;
     InputProps?: {
         endAdornment: JSX.Element
     };
-    value: string;
+    value: any;
     onChange: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>;
 }
  * ```
@@ -28,17 +30,19 @@ export interface IValidationField {
     label: string;
     name: string;
     required?: requiredRule;
-    helperText: string;
+    helperText?: string;
     className?: string;
     minLength?: minLengthRule;
     maxLength?: maxLengthRule;
     pattern?: patternRule;
+    min?: minRule;
+    max?: maxRule;
     defaultValue?: string;
     type?: string;
     InputProps?: {
         endAdornment: JSX.Element
     };
-    value: string;
+    value: any;
     onChange: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>;
 }
 
@@ -54,6 +58,12 @@ export const validationRules = {
     },
     required(value: string) {
         return value.trim().length > 0;
+    },
+    min(value: number, min: number) {
+        return value >= min;
+    },
+    max(value: number, max: number) {
+        return value <= max;
     },
 }
 
@@ -94,6 +104,16 @@ export default function ValidationField(props: IValidationField) {
             validate(validationRules.pattern(value, pattern), errorMessage);
         }
 
+        if (!isEmpty && props.min) {
+            const [min, errorMessage] = props.min;
+            validate(validationRules.min(value, min), errorMessage);
+        }
+
+        if (!isEmpty && props.max) {
+            const [max, errorMessage] = props.max;
+            validate(validationRules.max(value, max), errorMessage);
+        }
+
         if (isEmpty && props.required) {
             const errorMessage = props.required[1];
             errors.push(errorMessage);
@@ -128,3 +148,5 @@ export type minLengthRule = [number, string];
 export type maxLengthRule = [number, string];
 export type patternRule = [RegExp, string];
 export type requiredRule = [boolean, string];
+export type minRule = [number, string];
+export type maxRule = [number, string];
