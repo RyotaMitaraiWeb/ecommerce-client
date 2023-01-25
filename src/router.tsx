@@ -8,7 +8,7 @@ import ProductDetails from './components/Product/Details/ProductDetails';
 import Results from './components/Results/Results';
 import { ISnackbar, openSnackbar } from './features/snackbar/snackbarSlice';
 import { resetUser } from './features/user/userSlice';
-import { IProductDetails, IProductResults } from './interfaces';
+import { IError, IProductDetails, IProductResults } from './interfaces';
 import { dispatchOutsideOfComponent } from './util/dispatchOutsideOfComponent';
 import { redirectViaStatus } from './util/requests/redirect';
 import { del, get } from './util/requests/requests';
@@ -66,12 +66,12 @@ export const router = createBrowserRouter([
 
                     return null;
                 }
-                
+
             },
             {
                 path: 'logout',
                 element: null,
-                loader: async () => {                    
+                loader: async () => {
                     const { res, data } = await del('/user/logout');
                     if (res.ok) {
                         dispatchOutsideOfComponent<ISnackbar>(openSnackbar, {
@@ -153,10 +153,10 @@ export const router = createBrowserRouter([
                                     severity: 'error',
                                     message: 'You must be logged in to perform this action!',
                                 });
-        
+
                                 return redirect('/');
                             }
-        
+
                             return null;
                         }
                     },
@@ -167,7 +167,32 @@ export const router = createBrowserRouter([
                             const id = params['id'];
                             const { res, data } = await get<IProductDetails>(`/product/${id}`);
                             return redirectViaStatus(res.status) || data;
-                        }
+                        },
+                        children: [{
+                            path: 'delete',
+                            element: null,
+                            loader: async ({ params }) => {
+                                const id = params['id'];
+                                // data will be either an objet with id of the deleted product or an array of errors
+                                // so just type it as an error object in this case
+                                const { res, data } = await del<IError[]>(`/product/${id}`);
+                                if (!res.ok) {
+                                    dispatchOutsideOfComponent(openSnackbar, {
+                                        message: data[0].msg,
+                                        severity: 'error',
+                                    });
+
+                                    return redirectViaStatus(res.status, true);
+                                } else {
+                                    dispatchOutsideOfComponent(openSnackbar, {
+                                        message: 'Deleted the product successfully!',
+                                        severity: 'success',
+                                    });
+
+                                    return redirect('/');
+                                }
+                            }
+                        }]
                     }
                 ]
             }
