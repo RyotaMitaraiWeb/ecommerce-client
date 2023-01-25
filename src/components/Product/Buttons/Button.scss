@@ -1,0 +1,11 @@
+.action-button {
+    display: flex;
+    gap: 8px;
+    
+    &.delete-button {
+        background-color: #e53935;
+        &:hover {
+            background-color: #b71c1c;
+        }
+    }
+}
