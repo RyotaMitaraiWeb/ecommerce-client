@@ -8,6 +8,7 @@ import { Header } from './components/Header/Header';
 import { Home } from './components/Home/Home';
 import CreateProduct from './components/Product/Create/CreateProduct';
 import ProductDetails from './components/Product/Details/ProductDetails';
+import EditProduct from './components/Product/Edit/EditProduct';
 import Results from './components/Results/Results';
 import { ISnackbar, openSnackbar } from './features/snackbar/snackbarSlice';
 import { resetUser } from './features/user/userSlice';
@@ -166,6 +167,11 @@ export const router = createBrowserRouter([
                             },
                         ]
                     },
+                    {
+                        path: ':id/edit',
+                        element: <EditProduct />,
+                        loader: ownerGuard,
+                    }
                 ]
             }
         ]
