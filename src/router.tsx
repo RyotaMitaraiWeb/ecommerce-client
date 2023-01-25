@@ -15,7 +15,7 @@ import { resetUser } from './features/user/userSlice';
 import { IError, IProductDetails, IProductResults } from './interfaces';
 import { dispatchOutsideOfComponent } from './util/dispatchOutsideOfComponent';
 import { redirectViaStatus } from './util/requests/redirect';
-import { del, get } from './util/requests/requests';
+import { del, get, post } from './util/requests/requests';
 
 export default function Layout() {
     return (
@@ -171,6 +171,31 @@ export const router = createBrowserRouter([
                         path: ':id/edit',
                         element: <EditProduct />,
                         loader: ownerGuard,
+                    },
+                    {
+                        path: ':id/buy',
+                        element: null,
+                        loader: async ({ params }) => {
+                            const id = params['id'];
+                            // data will be either an object with id of the deleted product or an array of errors
+                            // so just type it as an error object in this case
+                            const { res, data } = await post<IError[]>(`/product/${id}/buy`);
+                            if (!res.ok) {
+                                dispatchOutsideOfComponent(openSnackbar, {
+                                    message: data[0].msg,
+                                    severity: 'error',
+                                });
+
+                                return redirectViaStatus(res.status, true);
+                            } else {
+                                dispatchOutsideOfComponent(openSnackbar, {
+                                    message: 'Successful purchase!',
+                                    severity: 'success',
+                                });
+
+                                return redirect(`/product/${id}`);
+                            }
+                        }
                     }
                 ]
             }
