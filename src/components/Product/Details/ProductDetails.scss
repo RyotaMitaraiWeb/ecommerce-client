@@ -4,13 +4,16 @@
     margin: 1em auto;
     text-align: center;
     width: 400px;
-    border-width: 2px;
-    border-style: solid;
+
+    &.details {
+        border-width: 2px;
+        border-style: solid;
+    }
 
     @media screen and (max-width: 450px) {
         width: 300px;
-    } 
-    
+    }
+
     .table {
         display: flex;
         justify-content: center;

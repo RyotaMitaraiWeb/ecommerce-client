@@ -10,7 +10,7 @@ export default function ProductDetails() {
     const product = useLoaderData() as IProductDetails;
     const theme = useTheme();
     return (
-        <section className="product">
+        <section className="product details">
             <div className="table">
                 <h1 style={{ background: theme.palette.primary.main }}>{product.name}</h1>
                 <img src={product.image} alt={product.name} />
