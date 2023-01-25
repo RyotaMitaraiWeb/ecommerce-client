@@ -1,4 +1,7 @@
 import { createBrowserRouter, Outlet, redirect } from 'react-router-dom';
+import { authGuard } from './app/guards/auth';
+import { guestGuard } from './app/guards/guest';
+import { ownerGuard } from './app/guards/owner';
 import Login from './components/Authentication/Login';
 import Register from './components/Authentication/Register';
 import { Header } from './components/Header/Header';
@@ -38,34 +41,12 @@ export const router = createBrowserRouter([
             {
                 path: 'login',
                 element: <Login />,
-                loader: () => {
-                    if (localStorage.getItem('accessToken')) {
-                        dispatchOutsideOfComponent<ISnackbar>(openSnackbar, {
-                            severity: 'error',
-                            message: 'You must be logged out to perform this action!',
-                        });
-
-                        return redirect('/');
-                    }
-
-                    return null;
-                }
+                loader: guestGuard,
             },
             {
                 path: 'register',
                 element: <Register />,
-                loader: () => {
-                    if (localStorage.getItem('accessToken')) {
-                        dispatchOutsideOfComponent<ISnackbar>(openSnackbar, {
-                            severity: 'error',
-                            message: 'You must be logged out to perform this action!',
-                        });
-
-                        return redirect('/');
-                    }
-
-                    return null;
-                }
+                loader: guestGuard,
 
             },
             {
@@ -86,7 +67,7 @@ export const router = createBrowserRouter([
                     } else {
                         dispatchOutsideOfComponent<ISnackbar>(openSnackbar, {
                             severity: 'error',
-                            message: 'You must be logged out to perform this action!',
+                            message: 'You must be logged in to perform this action!',
                         });
 
                         return redirectViaStatus(res.status, true);
@@ -147,18 +128,7 @@ export const router = createBrowserRouter([
                     {
                         path: 'create',
                         element: <CreateProduct />,
-                        loader: () => {
-                            if (!localStorage.getItem('accessToken')) {
-                                dispatchOutsideOfComponent<ISnackbar>(openSnackbar, {
-                                    severity: 'error',
-                                    message: 'You must be logged in to perform this action!',
-                                });
-
-                                return redirect('/');
-                            }
-
-                            return null;
-                        }
+                        loader: authGuard,
                     },
                     {
                         path: ':id',
@@ -168,32 +138,34 @@ export const router = createBrowserRouter([
                             const { res, data } = await get<IProductDetails>(`/product/${id}`);
                             return redirectViaStatus(res.status) || data;
                         },
-                        children: [{
-                            path: 'delete',
-                            element: null,
-                            loader: async ({ params }) => {
-                                const id = params['id'];
-                                // data will be either an objet with id of the deleted product or an array of errors
-                                // so just type it as an error object in this case
-                                const { res, data } = await del<IError[]>(`/product/${id}`);
-                                if (!res.ok) {
-                                    dispatchOutsideOfComponent(openSnackbar, {
-                                        message: data[0].msg,
-                                        severity: 'error',
-                                    });
+                        children: [
+                            {
+                                path: 'delete',
+                                element: null,
+                                loader: async ({ params }) => {
+                                    const id = params['id'];
+                                    // data will be either an object with id of the deleted product or an array of errors
+                                    // so just type it as an error object in this case
+                                    const { res, data } = await del<IError[]>(`/product/${id}`);
+                                    if (!res.ok) {
+                                        dispatchOutsideOfComponent(openSnackbar, {
+                                            message: data[0].msg,
+                                            severity: 'error',
+                                        });
 
-                                    return redirectViaStatus(res.status, true);
-                                } else {
-                                    dispatchOutsideOfComponent(openSnackbar, {
-                                        message: 'Deleted the product successfully!',
-                                        severity: 'success',
-                                    });
+                                        return redirectViaStatus(res.status, true);
+                                    } else {
+                                        dispatchOutsideOfComponent(openSnackbar, {
+                                            message: 'Deleted the product successfully!',
+                                            severity: 'success',
+                                        });
 
-                                    return redirect('/');
-                                }
-                            }
-                        }]
-                    }
+                                        return redirect('/');
+                                    }
+                                },
+                            },
+                        ]
+                    },
                 ]
             }
         ]
