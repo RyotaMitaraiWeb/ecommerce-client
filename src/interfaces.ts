@@ -22,6 +22,25 @@ export interface IProduct {
 
 /**
  * ```typescript
+ * interface IProductDetails {
+    image: string;
+    price: number;
+    _id: string;
+    owner: string;
+    hasBought: boolean;
+    isOwner: boolean;
+    isLogged: boolean;
+    ```
+}
+ */
+export interface IProductDetails extends IProduct {
+    hasBought: boolean;
+    isOwner: boolean;
+    isLogged: boolean;
+}
+
+/**
+ * ```typescript
  * interface IProductResults {
  *  products: IProduct[],
     total: number
@@ -57,4 +76,17 @@ export interface IError {
  */
 export interface IAuthResponse extends IUserState {
     accessToken: string;
+}
+
+/**
+ * ```typescript
+ * interface IButton {
+    _id: string;
+    children?: React.ReactNode;
+}
+ * ```
+ */
+export interface IButton {
+    _id: string;
+    children?: React.ReactNode;
 }

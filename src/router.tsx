@@ -4,10 +4,11 @@ import Register from './components/Authentication/Register';
 import { Header } from './components/Header/Header';
 import { Home } from './components/Home/Home';
 import CreateProduct from './components/Product/Create/CreateProduct';
+import ProductDetails from './components/Product/Details/ProductDetails';
 import Results from './components/Results/Results';
 import { ISnackbar, openSnackbar } from './features/snackbar/snackbarSlice';
 import { resetUser } from './features/user/userSlice';
-import { IProductResults } from './interfaces';
+import { IProductDetails, IProductResults } from './interfaces';
 import { dispatchOutsideOfComponent } from './util/dispatchOutsideOfComponent';
 import { redirectViaStatus } from './util/requests/redirect';
 import { del, get } from './util/requests/requests';
@@ -157,6 +158,15 @@ export const router = createBrowserRouter([
                             }
         
                             return null;
+                        }
+                    },
+                    {
+                        path: ':id',
+                        element: <ProductDetails />,
+                        loader: async ({ params }) => {
+                            const id = params['id'];
+                            const { res, data } = await get<IProductDetails>(`/product/${id}`);
+                            return redirectViaStatus(res.status) || data;
                         }
                     }
                 ]

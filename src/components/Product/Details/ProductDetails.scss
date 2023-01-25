@@ -1,0 +1,42 @@
+.product {
+    display: block;
+    color: white;
+    margin: 1em auto;
+    text-align: center;
+    width: 400px;
+    border-width: 2px;
+    border-style: solid;
+
+    @media screen and (max-width: 450px) {
+        width: 300px;
+    } 
+    
+    .table {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+
+        h1 {
+            padding: 0;
+            margin: 0;
+        }
+
+        .price {
+            font-weight: bold;
+            font-size: 2rem;
+            margin: 0;
+        }
+
+        img {
+            object-fit: cover;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 5px;
+            padding: 16px;
+        }
+    }
+}
