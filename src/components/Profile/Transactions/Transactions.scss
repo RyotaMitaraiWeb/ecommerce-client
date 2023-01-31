@@ -1,0 +1,19 @@
+#transactions-table {
+    width: 90%;
+    display: block;
+    margin: 0 auto;
+   
+    th {
+        font-weight: bold;
+    }
+
+    tbody {
+        tr:hover {
+            background-color: gray;
+            transition: background-color 0.1s;
+            td {
+                color: black;
+            }
+        }
+    }
+}

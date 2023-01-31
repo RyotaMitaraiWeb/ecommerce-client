@@ -90,3 +90,20 @@ export interface IButton {
     _id: string;
     children?: React.ReactNode;
 }
+
+/**
+ * ```typescript
+ * interface ITransaction {
+    _id: string;
+    buyer: string;
+    product: IProduct;
+    createdAt: Date;
+}
+ * ```
+ */
+export interface ITransaction {
+    _id: string;
+    buyer: string;
+    product: IProduct;
+    createdAt: string;
+}

@@ -9,6 +9,9 @@ import { Home } from './components/Home/Home';
 import CreateProduct from './components/Product/Create/CreateProduct';
 import ProductDetails from './components/Product/Details/ProductDetails';
 import EditProduct from './components/Product/Edit/EditProduct';
+import OwnProducts from './components/Profile/Products/OwnProducts';
+import Transactions from './components/Profile/Transactions/Transactions';
+import ProfileTabs from './components/Profile/ProfileTabs';
 import Results from './components/Results/Results';
 import { ISnackbar, openSnackbar } from './features/snackbar/snackbarSlice';
 import { resetUser } from './features/user/userSlice';
@@ -16,6 +19,7 @@ import { IError, IProductDetails, IProductResults } from './interfaces';
 import { dispatchOutsideOfComponent } from './util/dispatchOutsideOfComponent';
 import { redirectViaStatus } from './util/requests/redirect';
 import { del, get, post } from './util/requests/requests';
+import Settings from './components/Profile/Settings/Settings';
 
 export default function Layout() {
     return (
@@ -37,7 +41,71 @@ export const router = createBrowserRouter([
             },
             {
                 path: 'about',
-                element: <h1>About</h1>
+                element: <h1>About</h1>,
+            },
+            {
+                path: 'profile',
+                loader: authGuard,
+                children: [
+                    {
+                        path: '',
+                        loader: () => {
+                            return redirect('products');
+                        }
+                    },
+                    {
+                        path: 'products',
+                        element: (
+                            <>
+                                <ProfileTabs currentTab={0} />
+                                <OwnProducts />
+                            </>
+                        ),
+                        loader: async ({ request }) => {
+                            const url = new URL(request.url);
+                            const page = url.searchParams.get('page');
+                            const sort = url.searchParams.get('sort');
+                            const by = url.searchParams.get('by');
+
+                            if (!page) {
+                                url.searchParams.append('page', '1');
+                            }
+
+                            if (!sort || !by) {
+                                url.searchParams.append('sort', 'asc');
+                                url.searchParams.append('by', 'name');
+                            }
+
+                            const search = url.search;
+
+                            const { data } = await get('/product/own' + search);
+
+                            return data;
+                        }
+                    },
+                    {
+                        path: 'purchases',
+                        element: (
+                            <>
+                                <ProfileTabs currentTab={1} />
+                                <Transactions />
+                            </>
+                        ),
+                        loader: async () => {
+                            const { data } = await get('/user/transactions');
+                            return data;
+                        },
+                    },
+                    {
+                        path: 'settings',
+                        element: (
+                            <>
+                                <ProfileTabs currentTab={2} />
+                                <Settings />
+                            </>
+                        )
+                    }
+                ],
             },
             {
                 path: 'login',

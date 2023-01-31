@@ -11,7 +11,7 @@ import { Link, useSearchParams } from "react-router-dom";
  */
 export interface IPaginator {
     total: number;
-    endpoint: 'search' | 'all';
+    endpoint: 'search' | 'all' | 'own';
 }
 
 /**
@@ -34,11 +34,14 @@ export const Paginator = (props: IPaginator) => {
      * or a list of all products. ``item`` 
      * should be passed from the ``renderItem`` callback in ``PaginationItem``
      */
-    function to(endpoint: 'search' | 'all', item: PaginationRenderItemParams) {
+    function to(endpoint: 'search' | 'all' | 'own', item: PaginationRenderItemParams) {
         if (endpoint === 'search') {
             return `/product/search?name=${searchParams.get('name')}&page=${item.page}${sortBy}`;
         }
 
+        if (endpoint === 'own') {
+            return `/profile/products?page=${item.page}${sortBy}`;
+        }
         return `/product/all?page=${item.page}${sortBy}`;
     }
     
