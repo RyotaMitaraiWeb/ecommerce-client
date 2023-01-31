@@ -26,12 +26,12 @@ export default function Navigation() {
     }
 
     return (
-        <Box sx={{ backgroundColor: 'primary.main' }} component="nav" id="nav">
+        <nav id="nav">
             <ul className="links">
                 <li><Link to="/"><span className="fa fa-home"></span>Home</Link></li>
                 <li><Link to="/product/all"><span className="fa fa-th-list"></span>All</Link></li>
                 {authElemetLinks}
             </ul>
-        </Box>
+        </nav>
     )
 }

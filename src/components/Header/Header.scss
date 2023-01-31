@@ -1,6 +1,7 @@
 #header {
     display: flex;
     justify-content: space-between;
+    transition: background-color 0.2s;
 
     .fa, label, input {
         color: white;
