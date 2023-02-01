@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import { MemoryRouter, Router, RouterProvider } from "react-router-dom";
 import App from "../../App";
 import { store } from "../../app/store";
-import { router } from "../../router";
+import { router } from "../../app/router/router";
 
 
 const allProviders = ({ children }: { children: React.ReactNode }) => {

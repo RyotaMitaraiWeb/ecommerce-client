@@ -3,7 +3,7 @@ import { render, screen } from '../../util/test-utils/test.utils';
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
 import { store } from "../../app/store";
 import { setUser } from "../../features/user/userSlice";
-import Layout from '../../router';
+import Layout from '../../app/router/router';
 
 
 const router = createMemoryRouter([

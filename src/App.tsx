@@ -7,7 +7,7 @@ import './App.scss';
 import { useAppDispatch, useAppSelector } from './app/hooks';
 import SnackbarAlert from './features/snackbar/Snackbar';
 import { IUserState, setUser } from './features/user/userSlice';
-import { router } from './router';
+import { router } from './app/router/router';
 import { palette, themes } from './themes';
 import { get } from './util/requests/requests';
 
