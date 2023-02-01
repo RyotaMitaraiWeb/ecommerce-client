@@ -1,7 +1,7 @@
 import { redirect } from "react-router";
 import Login from "../../../components/Authentication/Login";
 import Register from "../../../components/Authentication/Register";
-import { Home } from "../../../components/Home/Home";
+import Home from "../../../components/Home/Home";
 import { ISnackbar, openSnackbar } from "../../../features/snackbar/snackbarSlice";
 import { resetUser } from "../../../features/user/userSlice";
 import { dispatchOutsideOfComponent } from "../../../util/dispatchOutsideOfComponent";
