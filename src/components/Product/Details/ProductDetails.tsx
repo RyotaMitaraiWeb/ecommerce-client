@@ -8,6 +8,7 @@ import './ProductDetails.scss';
 
 export default function ProductDetails() {
     const product = useLoaderData() as IProductDetails;
+
     const theme = useTheme();
     return (
         <section className="product details">
@@ -17,29 +18,27 @@ export default function ProductDetails() {
                 <Divider />
                 <p className="price">Price: ${product.price.toFixed(2)}</p>
                 <div className="actions">
-                    {product.isOwner
-                        ? (
-                            <>
-                                <EditButton _id={product._id} />
-                                <DeleteButton _id={product._id} />
-                            </>
-                        )
-                        : null
-                    }
-                    {!product.hasBought && !product.isOwner && product.isLogged
-                        ? <BuyButton _id={product._id} />
-                        : null
-                    }
-                    {product.hasBought
-                        ? <p>You have already bought this product!</p>
-                        : null
-                    }
-                    {!product.isLogged
-                        ? <p>Log in to interact with this product!</p>
-                        : null
-                    }
+                    <Actions product={product} />
                 </div>
             </div>
         </section>
     )
+}
+
+
+function Actions({ product }: { product: IProductDetails }) {
+    if (product.isOwner) {
+        return (
+            <>
+                <EditButton _id={product._id} />
+                <DeleteButton _id={product._id} />
+            </>
+        );
+    } else if (product.hasBought) {
+        return <p>You have already bought this product!</p>;
+    } else if (product.isLogged) {
+        return <BuyButton _id={product._id} />;
+    } else {
+        return <p>Log in to interact with this product!</p>;
+    }
 }
