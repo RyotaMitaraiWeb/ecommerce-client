@@ -1,12 +1,13 @@
 import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { useLoaderData } from 'react-router-dom';
-import { useAppSelector } from '../../../app/hooks';
+import { useAppSelector, useTitle } from '../../../app/hooks';
 import { ITransaction } from '../../../interfaces';
 import './Transactions.scss';
 
 export default function Transactions() {
     const data = useLoaderData() as ITransaction[];
     const transactions = data.map(toTableRow);
+    useTitle('Your purchases');
     
     return (
         <article>

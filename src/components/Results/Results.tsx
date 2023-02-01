@@ -3,6 +3,7 @@ import { Paginator } from "../Paginator/Paginator";
 import { IProductResults } from "../../interfaces";
 import ProductCard from "../ProductCard/ProductCard";
 import Sorter from "../Sorter/Sorter";
+import { useTitle } from "../../app/hooks";
 
 /**
  * ```typescript
@@ -26,6 +27,16 @@ export default function Results(props: IResults) {
     const { products, total } = data;
 
     const [searchParams] = useSearchParams();
+
+    let title = '';
+
+    if (props.endpoint === 'all') {
+        title = 'All products';
+    } else {
+        title = `Search results for "${searchParams.get('name')}"`;
+    }
+
+    useTitle(title);
 
     const cards = products.map(product => (
         <ProductCard

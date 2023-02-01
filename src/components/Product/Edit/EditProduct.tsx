@@ -1,7 +1,7 @@
 import { FormControl, Button } from '@mui/material';
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { useLoaderData, useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../../../app/hooks';
+import { useAppDispatch, useTitle } from '../../../app/hooks';
 import { openSnackbar } from '../../../features/snackbar/snackbarSlice';
 import { IProduct, IError } from '../../../interfaces';
 import { put } from '../../../util/requests/requests';
@@ -11,6 +11,7 @@ import './EditProduct.scss';
 
 export default function EditProduct() {
     const product: IProduct = useLoaderData() as IProduct;
+    useTitle(`Edit ${product.name}`);
     
     const [name, setName] = useState(product.name);
     const [price, setPrice] = useState(product.price);

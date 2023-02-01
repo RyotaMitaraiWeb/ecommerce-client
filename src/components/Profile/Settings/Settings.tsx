@@ -1,10 +1,12 @@
 import { FormControl, RadioGroup, Stack, ToggleButtonGroup } from '@mui/material';
-import { useAppSelector } from '../../../app/hooks';
+import { useAppSelector, useTitle } from '../../../app/hooks';
 import PaletteOption from './Palette/Palette';
 import './Settings.scss';
 import ThemeOption from './Theme/Theme';
 
 export default function Settings() {
+    useTitle('Customize appearance');
+
     return (
         <article className="settings">
             <h1>Settings</h1>

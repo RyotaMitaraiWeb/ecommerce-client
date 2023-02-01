@@ -1,8 +1,10 @@
 import { Button } from "@mui/material";
-import { useAppSelector } from "../../app/hooks";
+import { useAppSelector, useTitle } from "../../app/hooks";
 import './Home.scss';
 
 export default function Home() {
+    useTitle('Home');
+    
     return (
         <section className="home">
             <h1>Welcome!</h1>

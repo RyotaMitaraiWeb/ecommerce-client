@@ -1,5 +1,6 @@
 import { Box, Button, ButtonGroup, Divider, useTheme } from '@mui/material';
 import { useLoaderData } from 'react-router-dom';
+import { useTitle } from '../../../app/hooks';
 import { IProductDetails } from '../../../interfaces';
 import BuyButton from '../Buttons/Buy';
 import DeleteButton from '../Buttons/Delete';
@@ -8,6 +9,7 @@ import './ProductDetails.scss';
 
 export default function ProductDetails() {
     const product = useLoaderData() as IProductDetails;
+    useTitle(product.name);
 
     const theme = useTheme();
     return (

@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
+import { useTitle } from "../../app/hooks";
 
 export default function NotFound() {
+    useTitle('Not found');
+    
     return (
         <section className="not-found" style={{ textAlign: 'center' }}>
             <h1>404 Not Found</h1>

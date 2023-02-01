@@ -1,7 +1,7 @@
 import { Button, FormControl } from '@mui/material';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../../../app/hooks';
+import { useAppDispatch, useTitle } from '../../../app/hooks';
 import { openSnackbar } from '../../../features/snackbar/snackbarSlice';
 import { IError, IProduct } from '../../../interfaces';
 import { post } from '../../../util/requests/requests';
@@ -15,6 +15,8 @@ export default function CreateProduct() {
     const [image, setImage] = useState('');
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
+
+    useTitle('Create a new product');
 
     function changeName(event: ChangeEvent) {
         const target = event.target as HTMLInputElement;
