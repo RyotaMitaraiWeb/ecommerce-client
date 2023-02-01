@@ -3,6 +3,7 @@ import { Header } from '../../components/Header/Header';
 import { productRoutes } from './routes/product';
 import { profileRoutes } from './routes/profile';
 import { indexRoutes } from './routes';
+import NotFound from '../../components/NotFound/NotFound';
 
 export default function Layout() {
     return (
@@ -20,6 +21,10 @@ export const router = createBrowserRouter([
             ...indexRoutes,
             profileRoutes,
             productRoutes,
+            {
+                path: '*',
+                element: <NotFound />,
+            }
         ],
     },
 ]);
