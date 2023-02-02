@@ -26,7 +26,7 @@ async function request<T>(method: method, url: string = '', body?: any) {
     } else if (process.env.NODE_ENV === 'production') {
         api = prod.api;
     } else {
-        api = '';
+        api = dev.api;
     }
 
     // Prefix the slash at the beginning if it's not there
@@ -56,7 +56,7 @@ async function request<T>(method: method, url: string = '', body?: any) {
         data = await res.json()
     } else {
         data = {} as T;
-    }
+    }  
 
     return { res, data };
 }
