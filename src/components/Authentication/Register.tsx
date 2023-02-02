@@ -1,7 +1,7 @@
 import { Button, FormControl, IconButton, InputAdornment, TextField, Tooltip } from "@mui/material";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../../app/hooks";
+import { useAppDispatch, useTitle } from "../../app/hooks";
 import { openSnackbar } from "../../features/snackbar/snackbarSlice";
 import { IUserState, setUser } from "../../features/user/userSlice";
 import { IAuthResponse, IError } from "../../interfaces";
@@ -20,6 +20,7 @@ export default function Register() {
     const [showPassword, setPasswordVisibility] = useState(false);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    useTitle('Register');
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
