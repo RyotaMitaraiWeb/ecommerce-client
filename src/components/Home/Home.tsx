@@ -21,16 +21,16 @@ function QuickLinks() {
     if (user._id) {
         return (
             <>
-                <Button variant="contained" href="/product/all">Explore all products</Button>
-                <Button variant="contained" href="/product/create">Create your own products</Button>
-                <Button variant="contained" href="/profile/settings">Customize the app's appearance</Button>
+                <Button className="action-button user-action" variant="contained" href="/product/all">Explore all products</Button>
+                <Button className="action-button user-action" variant="contained" href="/product/create">Create your own products</Button>
+                <Button className="action-button user-action" variant="contained" href="/profile/settings">Customize the app's appearance</Button>
             </>
         );
     } else {
         return (
             <>
-                <Button variant="contained" href="/login">Log in to your profile</Button>
-                <Button variant="contained" href="/register">Create an account</Button>
+                <Button className="action-button" variant="contained" href="/login">Log in to your profile</Button>
+                <Button className="action-button" variant="contained" href="/register">Create an account</Button>
             </>
         );
     }
