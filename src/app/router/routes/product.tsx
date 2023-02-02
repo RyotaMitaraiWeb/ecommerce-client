@@ -55,7 +55,7 @@ export const productRoutes: RouteObject = {
                     url.searchParams.append('by', 'name');
                 }
 
-                const search = url.search;
+                const search = url.search;                
 
                 const { data } = await get('/product/search' + search);
                 return data;

@@ -31,7 +31,7 @@ export default function SearchField() {
             InputProps={{
                 endAdornment: (
                     <InputAdornment position="end">
-                        <IconButton onClick={handleClick} aria-label="results">
+                        <IconButton onClick={handleClick} aria-label="Search products">
                             <span className="fa fa-search"></span>
                         </IconButton>
                     </InputAdornment>
