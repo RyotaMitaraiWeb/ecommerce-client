@@ -6,7 +6,7 @@ const client = 'http://localhost:3000';
 const server = 'http://localhost:5000';
 const loadAuthEndpoint = '/user';
 
-test.describe('Home page', () => {
+test.describe.parallel('Home page', () => {
     test('Renders welcome heading', async ({ page }) => {
         await page.route(server + loadAuthEndpoint, async (route) => {
             await route.abort();

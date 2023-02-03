@@ -6,7 +6,7 @@ const client = 'http://localhost:3000';
 const server = 'http://localhost:5000';
 const loadAuthEndpoint = '/user';
 
-test.describe('Navigation component', async () => {
+test.describe.parallel('Navigation component', async () => {
     test('Displays four links when the user is not logged in', async ({ page }) => {
         await page.route(server + loadAuthEndpoint, async (route) => {
             await route.abort();

@@ -12,7 +12,7 @@ const logoutPage = client + '/logout';
 const logoutEndpoint = '/user/logout';
 const logoutPath = server + logoutEndpoint;
 
-test.describe('Logout', async () => {
+test.describe.parallel('Logout', async () => {
     test.beforeEach(async ({ page }) => {
         await page.goto(client);
     });

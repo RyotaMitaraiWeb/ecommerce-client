@@ -6,7 +6,7 @@ const client = 'http://localhost:3000';
 const server = 'http://localhost:5000';
 const loadAuthEndpoint = '/user';
 
-test.describe('Search field component', async () => {
+test.describe.parallel('Search field component', async () => {
     test.beforeEach(async ({ page }) => {
         await page.route(server + loadAuthEndpoint, async (route) => {
             await route.abort();

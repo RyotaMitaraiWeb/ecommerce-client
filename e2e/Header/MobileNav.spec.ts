@@ -6,7 +6,7 @@ const client = 'http://localhost:3000';
 const server = 'http://localhost:5000';
 const loadAuthEndpoint = '/user';
 
-test.describe('Mobile navigation + burger menu', async () => {
+test.describe.parallel('Mobile navigation + burger menu', async () => {
     test('Burger menus are invisible if the viewport width is higher than 780px', async ({ page }) => {
         await page.setViewportSize({ width: 781, height: 500 });
         await page.route(server + loadAuthEndpoint, async (route) => {

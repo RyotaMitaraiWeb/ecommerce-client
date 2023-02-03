@@ -6,7 +6,7 @@ const client = 'http://localhost:3000';
 const server = 'http://localhost:5000';
 const loadAuthEndpoint = '/user';
 
-test.describe('Header component', async () => {
+test.describe.parallel('Header component', async () => {
     test('Has a deep purple background if the user is not logged in', async ({ page }) => {
         await page.route(server + loadAuthEndpoint, async (route) => {
             await route.abort();

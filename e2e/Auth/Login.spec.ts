@@ -8,7 +8,7 @@ const loginPage = `${client}/login`;
 const server = 'http://localhost:5000';
 const loadAuthEndpoint = '/user';
 
-test.describe('Login', async () => {
+test.describe.parallel('Login', async () => {
     test('Submit button is disabled if at least one field is empty and enabled when both are active', async ({ page }) => {
         await page.route(server + loadAuthEndpoint, async (route) => {
             await route.abort();
