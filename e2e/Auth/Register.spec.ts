@@ -103,7 +103,7 @@ test.describe('Register', async () => {
         expect(title.includes('Home')).toBe(true);
     });
 
-    test('Displays an error snackbar and does not redirect when login fails', async ({ page }) => {
+    test('Displays an error snackbar and does not redirect when register fails', async ({ page }) => {
         await page.route(server + loadAuthEndpoint, async (route) => {
             await route.abort();
         });
