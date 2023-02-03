@@ -23,14 +23,10 @@ const LinkBehavior = React.forwardRef<
 function App() {
     const mode = useAppSelector(state => state.user.theme);
     const palette = useAppSelector(state => state.user.palette);
-    console.log(palette);
-
     const dispatch = useAppDispatch();
 
-    const theme = useMemo(() => {
-        console.log('recalculate');
-        
-        return createTheme({
+    const theme = useMemo(() =>
+        createTheme({
             palette: {
                 mode,
                 primary: {
@@ -47,9 +43,7 @@ function App() {
                     },
                 },
             }
-        }
-        )
-    }, [mode, palette]
+        }), [palette, mode]
     );
 
 
@@ -58,8 +52,6 @@ function App() {
             const { res, data } = await get<IUserState>('/user');
             if (res.ok) {
                 dispatch(setUser(data));
-                console.log(data);
-
             } else {
                 localStorage.removeItem('accessToken');
             }
@@ -69,11 +61,13 @@ function App() {
     }, [dispatch]);
 
     return (
-        <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <RouterProvider router={router} />
-            <SnackbarAlert />
-        </ThemeProvider>
+        <main className={mode}>
+            <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <RouterProvider router={router} />
+                <SnackbarAlert />
+            </ThemeProvider>
+        </main>
     );
 }
 
