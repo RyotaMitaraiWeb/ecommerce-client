@@ -1,6 +1,10 @@
 # Ecommerce Client
 Client-side for Ecommerce application, written in TypeScript and React
 
+Deployed version: [https://ecommerce-315d8.web.app/](https://ecommerce-315d8.web.app/)
+
+**NOTE:** Due to the server using a free plan, it is possible for the application to be non-responding (or "frozen") for a few minutes if it has not been used by anyone for some time. Please be patient!
+
 ## How to run
 ```bash
 npm install
