@@ -1,7 +1,7 @@
 import { FormControl, Button } from '@mui/material';
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { useLoaderData, useNavigate } from 'react-router-dom';
-import { useAppDispatch, useTitle } from '../../../app/hooks';
+import { useAppDispatch, useAppSelector, useTitle } from '../../../app/hooks';
 import { openSnackbar } from '../../../features/snackbar/snackbarSlice';
 import { IProduct, IError } from '../../../interfaces';
 import { put } from '../../../util/requests/requests';
@@ -17,6 +17,7 @@ export default function EditProduct() {
     const [price, setPrice] = useState(product.price);
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
+    const fetching = useAppSelector(state => state.fetching.fetching);
 
     function changeName(event: ChangeEvent) {
         const target = event.target as HTMLInputElement;
@@ -87,7 +88,7 @@ export default function EditProduct() {
                     type="submit"
                     className="submit"
                     variant="contained"
-                    disabled={!(name && price)}
+                    disabled={!(name && price) || fetching}
                 >
                     <span className="fa fa-pencil"></span>
                     Edit Product

@@ -2,6 +2,8 @@ import { HttpStatus } from "../httpstatus.enum";
 import { environment as dev } from '../../environment/env.development';
 import { environment as prod } from "../../environment/env.production";
 import { redirect } from "react-router-dom";
+import { dispatchOutsideOfComponent } from "../dispatchOutsideOfComponent";
+import { finishFetching, startFetching } from "../../features/fetching/fetchingSlice";
 
 type method = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
@@ -49,6 +51,7 @@ async function request<T>(method: method, url: string = '', body?: any) {
         request.body = JSON.stringify(body);
     }
 
+    dispatchOutsideOfComponent(startFetching);
     const res = await fetch(api + url, request);
 
     let data: T;
@@ -56,23 +59,25 @@ async function request<T>(method: method, url: string = '', body?: any) {
         data = await res.json()
     } else {
         data = {} as T;
-    }  
+    }
+
+    dispatchOutsideOfComponent(finishFetching);
 
     return { res, data };
 }
 
 export function get<T>(url: string) {
-   return request<T>('GET', url);
+    return request<T>('GET', url);
 }
 
 export function post<T>(url: string, body?: any) {
     return request<T>('POST', url, body);
- }
+}
 
- export function put<T>(url: string, body?: any) {
+export function put<T>(url: string, body?: any) {
     return request<T>('PUT', url, body);
- }
+}
 
- export function del<T>(url: string) {
+export function del<T>(url: string) {
     return request<T>('DELETE', url);
- }
+}

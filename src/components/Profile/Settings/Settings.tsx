@@ -6,6 +6,7 @@ import ThemeOption from './Theme/Theme';
 
 export default function Settings() {
     useTitle('Customize appearance');
+    const fetching = useAppSelector(state => state.fetching.fetching);
 
     return (
         <article className="settings">
@@ -13,7 +14,7 @@ export default function Settings() {
             <section className="palettes">
                 <h2>Change application color</h2>
                 <Stack justifyContent="center">
-                    <FormControl>
+                    <FormControl disabled={fetching}>
                         <RadioGroup name="palette">
                             <Stack
                                 direction="row"
@@ -35,7 +36,7 @@ export default function Settings() {
             <section className="themes">
                 <h2>Change theme</h2>
                 <Stack justifyContent="center">
-                    <FormControl>
+                    <FormControl disabled={fetching}>
                         <RadioGroup name="theme">
                             <Stack
                                 direction="row"

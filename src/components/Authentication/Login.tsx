@@ -1,7 +1,7 @@
 import { Button, FormControl, IconButton, InputAdornment, TextField, Tooltip } from "@mui/material";
 import { ChangeEvent, FormEvent, FormEventHandler, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useTitle } from "../../app/hooks";
+import { useAppDispatch, useAppSelector, useTitle } from "../../app/hooks";
 import { openSnackbar } from "../../features/snackbar/snackbarSlice";
 import { IUserState, setUser } from "../../features/user/userSlice";
 import { IAuthResponse, IError } from "../../interfaces";
@@ -17,6 +17,7 @@ export default function Login() {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     useTitle('Login');
+    const fetching = useAppSelector(state => state.fetching.fetching);
 
     function handleUsernameChange(event: ChangeEvent) {
         const target = event.target as HTMLInputElement;
@@ -101,7 +102,7 @@ export default function Login() {
                     className="submit"
                     type="submit"
                     variant="contained"
-                    disabled={!(username && password)}
+                    disabled={!(username && password) || fetching}
                 >
                     <span className="fa fa-sign-in"></span>
                     Sign in

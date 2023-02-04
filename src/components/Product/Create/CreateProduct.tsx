@@ -1,7 +1,7 @@
 import { Button, FormControl } from '@mui/material';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch, useTitle } from '../../../app/hooks';
+import { useAppDispatch, useAppSelector, useTitle } from '../../../app/hooks';
 import { openSnackbar } from '../../../features/snackbar/snackbarSlice';
 import { IError, IProduct } from '../../../interfaces';
 import { post } from '../../../util/requests/requests';
@@ -15,6 +15,8 @@ export default function CreateProduct() {
     const [image, setImage] = useState('');
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
+
+    const fetching = useAppSelector(state => state.fetching.fetching);
 
     useTitle('Create a new product');
 
@@ -104,7 +106,7 @@ export default function CreateProduct() {
                     type="submit"
                     className="submit"
                     variant="contained"
-                    disabled={!(image && name && price)}
+                    disabled={!(image && name && price) || fetching}
                 >
                     <span className="fa fa-plus"></span>
                     Create Product

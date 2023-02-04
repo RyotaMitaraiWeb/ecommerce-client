@@ -1,7 +1,7 @@
 import { Button, FormControl, IconButton, InputAdornment, TextField, Tooltip } from "@mui/material";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useTitle } from "../../app/hooks";
+import { useAppDispatch, useAppSelector, useTitle } from "../../app/hooks";
 import { openSnackbar } from "../../features/snackbar/snackbarSlice";
 import { IUserState, setUser } from "../../features/user/userSlice";
 import { IAuthResponse, IError } from "../../interfaces";
@@ -21,6 +21,8 @@ export default function Register() {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     useTitle('Register');
+
+    const fetching = useAppSelector(state => state.fetching.fetching);
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -119,7 +121,7 @@ export default function Register() {
                     className="submit"
                     type="submit"
                     variant="contained"
-                    disabled={!(username && password)}
+                    disabled={!(username && password) || fetching}
                 >
                     <span className="fa fa-sign-in"></span>
                     Sign up
