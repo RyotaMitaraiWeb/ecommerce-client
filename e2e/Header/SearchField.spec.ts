@@ -1,6 +1,7 @@
 import test from "@playwright/test";
 import { expect } from "@playwright/test";
 import { HttpStatus } from "../../src/util/httpstatus.enum";
+import { rejectRequest } from "../userAuthorization";
 
 const client = 'http://localhost:3000';
 const server = 'http://localhost:5000';
@@ -9,7 +10,7 @@ const loadAuthEndpoint = '/user';
 test.describe.parallel('Search field component', async () => {
     test.beforeEach(async ({ page }) => {
         await page.route(server + loadAuthEndpoint, async (route) => {
-            await route.abort();
+            await route.fulfill(rejectRequest());
         });
 
         await page.goto(client);

@@ -1,6 +1,7 @@
 import test from "@playwright/test";
 import { expect } from "@playwright/test";
 import { HttpStatus } from "../../src/util/httpstatus.enum";
+import { authorizeRequest, rejectRequest } from "../userAuthorization";
 
 const client = 'http://localhost:3000';
 const logout = `${client}/logout`;
@@ -22,12 +23,7 @@ test.describe.parallel('Logout', async () => {
             await route.fulfill({
                 status: HttpStatus.OK,
                 contentType: 'application/json',
-                body: JSON.stringify({
-                    _id: '1',
-                    username: '1',
-                    palette: 'indigo',
-                    theme: 'light',
-                })
+                body: JSON.stringify(authorizeRequest())
             });
         });
 
@@ -45,7 +41,7 @@ test.describe.parallel('Logout', async () => {
 
     test('Redirects to login page when the user is not logged in', async ({ page }) => {
         await page.route(server + loadAuthEndpoint, async (route) => {
-            await route.abort();
+            await route.fulfill(rejectRequest());
         });
 
         await page.route(logoutPath, async (route) => {

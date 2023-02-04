@@ -1,6 +1,7 @@
 import test from "@playwright/test";
 import { expect } from "@playwright/test";
 import { HttpStatus } from "../../src/util/httpstatus.enum";
+import { authorizeRequest, rejectRequest } from "../userAuthorization";
 
 const client = 'http://localhost:3000';
 const loginPage = `${client}/login`;
@@ -11,7 +12,7 @@ const loadAuthEndpoint = '/user';
 test.describe.parallel('Login', async () => {
     test('Submit button is disabled if at least one field is empty and enabled when both are active', async ({ page }) => {
         await page.route(server + loadAuthEndpoint, async (route) => {
-            await route.abort();
+            await route.fulfill(rejectRequest());
         });
 
         await page.goto(loginPage);
@@ -32,7 +33,7 @@ test.describe.parallel('Login', async () => {
 
     test('Toggle password visibility button toggles the password field\'s type successfully', async ({ page }) => {
         await page.route(server + loadAuthEndpoint, async (route) => {
-            await route.abort();
+            await route.fulfill(rejectRequest());
         });
 
         await page.goto(loginPage);
@@ -58,7 +59,9 @@ test.describe.parallel('Login', async () => {
 
     test('Login page is not accessible to logged in users', async ({ page }) => {
         await page.route(server + loadAuthEndpoint, async (route) => {
-            await route.abort();
+            await page.route(server + loadAuthEndpoint, async (route) => {
+                await route.fulfill(authorizeRequest());
+            });
         });
 
         await page.addInitScript(() => {
@@ -73,20 +76,11 @@ test.describe.parallel('Login', async () => {
 
     test('Successfully redirects when the user logs in successfully', async ({ page }) => {
         await page.route(server + loadAuthEndpoint, async (route) => {
-            await route.abort();
+            await route.fulfill(rejectRequest());
         });
 
         await page.route(server + '/user/login', async (route) => {
-            await route.fulfill({
-                status: HttpStatus.OK,
-                contentType: 'application/json',
-                body: JSON.stringify({
-                    _id: '1',
-                    username: '1',
-                    palette: 'indigo',
-                    theme: 'light',
-                })
-            });
+            await route.fulfill(authorizeRequest())
         });
 
         await page.goto(loginPage);
@@ -105,7 +99,7 @@ test.describe.parallel('Login', async () => {
 
     test('Displays an error snackbar and does not redirect when login fails', async ({ page }) => {
         await page.route(server + loadAuthEndpoint, async (route) => {
-            await route.abort();
+            await route.fulfill(rejectRequest());
         });
 
         await page.route(server + '/user/login', async (route) => {

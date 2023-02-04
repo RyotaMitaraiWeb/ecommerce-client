@@ -1,6 +1,7 @@
 import test from "@playwright/test";
 import { expect } from "@playwright/test";
 import { HttpStatus } from "../../src/util/httpstatus.enum";
+import { authorizeRequest } from "../userAuthorization";
 
 const client = 'http://localhost:3000';
 const server = 'http://localhost:5000';
@@ -13,26 +14,11 @@ test.describe.parallel('Profile (settings)', () => {
         });
 
         await page.route(server + loadAuthEndpoint, async (route) => {
-            await route.fulfill({
-                status: HttpStatus.OK,
-                contentType: 'application/json',
-                body: JSON.stringify({
-                    _id: '1',
-                    username: '1',
-                    palette: 'indigo',
-                    theme: 'light',
-                })
-            });
+            await route.fulfill(authorizeRequest());
         });
 
         await page.route(server + '/user/palette', async (route) => {
-            await route.fulfill({
-                status: HttpStatus.OK,
-                contentType: 'application/json',
-                body: JSON.stringify({ // doesn't matter what you return, the component uses the props to update the palette
-                    palette: 'pink'
-                })
-            })
+            await route.fulfill(authorizeRequest());
         });
 
         await page.route(server + '/user/theme', async (route) => {

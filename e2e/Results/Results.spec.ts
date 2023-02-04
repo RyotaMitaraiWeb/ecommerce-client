@@ -2,6 +2,7 @@ import test from "@playwright/test";
 import { expect } from "@playwright/test";
 import { HttpStatus } from "../../src/util/httpstatus.enum";
 import { createCardsSeed } from "../createCardsSeed";
+import { rejectRequest } from "../userAuthorization";
 
 const client = 'http://localhost:3000';
 const all = client + '/product/all';
@@ -12,7 +13,7 @@ const loadAuthEndpoint = '/user';
 test.describe.parallel('All + search results', async () => {
     test.beforeEach(async ({ page }) => {
         await page.route(server + loadAuthEndpoint, async (route) => {
-            await route.abort();
+            await route.fulfill(rejectRequest());
         });
     });
 

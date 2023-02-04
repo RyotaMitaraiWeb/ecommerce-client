@@ -1,6 +1,7 @@
 import test from "@playwright/test";
 import { expect } from "@playwright/test";
 import { HttpStatus } from "../../src/util/httpstatus.enum";
+import { authorizeRequest, rejectRequest } from "../userAuthorization";
 
 const client = 'http://localhost:3000';
 const server = 'http://localhost:5000';
@@ -9,7 +10,7 @@ const loadAuthEndpoint = '/user';
 test.describe.parallel('Navigation component', async () => {
     test('Displays four links when the user is not logged in', async ({ page }) => {
         await page.route(server + loadAuthEndpoint, async (route) => {
-            await route.abort();
+            await route.fulfill(rejectRequest());
         });
 
         await page.goto(client);
@@ -21,16 +22,7 @@ test.describe.parallel('Navigation component', async () => {
 
     test('Displays five links when the user is logged in', async ({ page }) => {
         await page.route(server + loadAuthEndpoint, async (route) => {
-            await route.fulfill({
-                status: HttpStatus.OK,
-                body: JSON.stringify({
-                    _id: '1',
-                    username: '1',
-                    palette: 'indigo',
-                    theme: 'light',
-                }),
-                contentType: 'application/json',
-            });
+            await route.fulfill(authorizeRequest());
         });
 
         await page.goto(client);

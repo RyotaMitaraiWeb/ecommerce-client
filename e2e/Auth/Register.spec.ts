@@ -1,6 +1,7 @@
 import test from "@playwright/test";
 import { expect } from "@playwright/test";
 import { HttpStatus } from "../../src/util/httpstatus.enum";
+import { authorizeRequest, rejectRequest } from "../userAuthorization";
 
 const client = 'http://localhost:3000';
 const registerPage = `${client}/register`;
@@ -11,7 +12,7 @@ const loadAuthEndpoint = '/user';
 test.describe.parallel('Register', async () => {
     test('Submit button is disabled if at least one field is empty and enabled when both are active', async ({ page }) => {
         await page.route(server + loadAuthEndpoint, async (route) => {
-            await route.abort();
+            await route.fulfill(rejectRequest());
         });
 
         await page.goto(registerPage);
@@ -32,7 +33,9 @@ test.describe.parallel('Register', async () => {
 
     test('Toggle password visibility button toggles the password field\'s type successfully', async ({ page }) => {
         await page.route(server + loadAuthEndpoint, async (route) => {
-            await route.abort();
+            await page.route(server + loadAuthEndpoint, async (route) => {
+                await route.fulfill(rejectRequest());
+            });
         });
 
         await page.goto(registerPage);
@@ -58,7 +61,7 @@ test.describe.parallel('Register', async () => {
 
     test('Register page is not accessible to logged in users', async ({ page }) => {
         await page.route(server + loadAuthEndpoint, async (route) => {
-            await route.abort();
+            await route.fulfill(authorizeRequest());
         });
 
         await page.addInitScript(() => {
@@ -73,20 +76,11 @@ test.describe.parallel('Register', async () => {
 
     test('Successfully redirects when the user registers successfully', async ({ page }) => {
         await page.route(server + loadAuthEndpoint, async (route) => {
-            await route.abort();
+            await route.fulfill(rejectRequest());
         });
 
         await page.route(server + '/user/register', async (route) => {
-            await route.fulfill({
-                status: HttpStatus.OK,
-                contentType: 'application/json',
-                body: JSON.stringify({
-                    _id: '1',
-                    username: 'ryota1',
-                    palette: 'indigo',
-                    theme: 'light',
-                })
-            });
+            await route.fulfill(authorizeRequest());
         });
 
         await page.goto(registerPage);
@@ -105,7 +99,7 @@ test.describe.parallel('Register', async () => {
 
     test('Displays an error snackbar and does not redirect when register fails', async ({ page }) => {
         await page.route(server + loadAuthEndpoint, async (route) => {
-            await route.abort();
+            await route.fulfill(rejectRequest());
         });
 
         await page.route(server + '/user/register', async (route) => {
@@ -136,7 +130,7 @@ test.describe.parallel('Register', async () => {
 
     test('Username field displays validation errors successfully', async ({ page }) => {
         await page.route(server + loadAuthEndpoint, async (route) => {
-            await route.abort();
+            await route.fulfill(rejectRequest());
         });
 
         await page.goto(registerPage);
@@ -156,7 +150,7 @@ test.describe.parallel('Register', async () => {
 
     test('Password field displays validation errors successfully', async ({ page }) => {
         await page.route(server + loadAuthEndpoint, async (route) => {
-            await route.abort();
+            await route.fulfill(rejectRequest());
         });
 
         await page.goto(registerPage);

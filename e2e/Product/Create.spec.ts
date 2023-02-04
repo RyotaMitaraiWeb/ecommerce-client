@@ -2,6 +2,7 @@ import test from "@playwright/test";
 import { expect } from "@playwright/test";
 import { HttpStatus } from "../../src/util/httpstatus.enum";
 import { createCardsSeed } from "../createCardsSeed";
+import { authorizeRequest } from "../userAuthorization";
 import { createProductsSeed } from "./createProductsSeed";
 
 const client = 'http://localhost:3000';
@@ -18,7 +19,7 @@ test.describe.parallel('Product (create page)', () => {
         });
 
         await page.route(server + loadAuthEndpoint, async (route) => {
-            await route.abort();
+            await route.fulfill(authorizeRequest());
         });
 
         await page.goto(createPage);

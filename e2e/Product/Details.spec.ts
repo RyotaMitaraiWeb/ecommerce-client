@@ -1,6 +1,7 @@
 import test from "@playwright/test";
 import { expect } from "@playwright/test";
 import { HttpStatus } from "../../src/util/httpstatus.enum";
+import { authorizeRequest, rejectRequest } from "../userAuthorization";
 import { createProductsSeed } from "./createProductsSeed";
 
 const client = 'http://localhost:3000';
@@ -13,7 +14,7 @@ const productEndpoint = server + product;
 test.describe.parallel('Product (details page)', () => {
     test.beforeEach(async ({ page }) => {
         await page.route(server + loadAuthEndpoint, async (route) => {
-            await route.abort();
+            await route.fulfill(rejectRequest());
         });
     });
 
@@ -87,7 +88,6 @@ test.describe.parallel('Product (details page)', () => {
         });
 
         await page.goto(productPage);
-        const buyButton = await page.waitForSelector('text=Buy');
 
         await page.route(productEndpoint, async (route) => {
             await route.fulfill(createProductsSeed('bought'));
@@ -101,6 +101,7 @@ test.describe.parallel('Product (details page)', () => {
             });
         });
 
+        const buyButton = await page.waitForSelector('text=Buy');
         await buyButton.click();
         const text = await page.waitForSelector('text=Bought');
         expect(await text.isVisible()).toBe(true);
@@ -140,7 +141,7 @@ test.describe.parallel('Product (details page)', () => {
         expect(title).toBe('Home');
     });
 
-    test.only('Redirects to not found page for a 404 error', async ({ page }) => {
+    test('Redirects to not found page for a 404 error', async ({ page }) => {
         await page.route(productEndpoint, async (route) => {
             await route.fulfill({
                 status: HttpStatus.NOT_FOUND,

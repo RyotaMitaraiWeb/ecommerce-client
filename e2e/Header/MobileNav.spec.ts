@@ -1,6 +1,7 @@
 import test from "@playwright/test";
 import { expect } from "@playwright/test";
 import { HttpStatus } from "../../src/util/httpstatus.enum";
+import { authorizeRequest, rejectRequest } from "../userAuthorization";
 
 const client = 'http://localhost:3000';
 const server = 'http://localhost:5000';
@@ -10,7 +11,7 @@ test.describe.parallel('Mobile navigation + burger menu', async () => {
     test('Burger menus are invisible if the viewport width is higher than 780px', async ({ page }) => {
         await page.setViewportSize({ width: 781, height: 500 });
         await page.route(server + loadAuthEndpoint, async (route) => {
-            await route.abort();
+            await route.fulfill(rejectRequest());
         });
 
         await page.goto(client);
@@ -24,7 +25,7 @@ test.describe.parallel('Mobile navigation + burger menu', async () => {
     test('Clicking the burger menu button opens the mobile navigation menu', async ({ page }) => {
         await page.setViewportSize({ width: 780, height: 500 });
         await page.route(server + loadAuthEndpoint, async (route) => {
-            await route.abort();
+            await route.fulfill(rejectRequest());
         });
 
         await page.goto(client);
@@ -37,7 +38,7 @@ test.describe.parallel('Mobile navigation + burger menu', async () => {
     test('Displays four links when the user is not logged in', async ({ page }) => {
         await page.setViewportSize({ width: 780, height: 500 });
         await page.route(server + loadAuthEndpoint, async (route) => {
-            await route.abort();
+            await route.fulfill(rejectRequest());
         });
 
         await page.goto(client);
@@ -52,16 +53,7 @@ test.describe.parallel('Mobile navigation + burger menu', async () => {
     test('Displays five links when the user is logged in', async ({ page }) => {
         await page.setViewportSize({ width: 780, height: 500 });
         await page.route(server + loadAuthEndpoint, async (route) => {
-            await route.fulfill({
-                status: HttpStatus.OK,
-                body: JSON.stringify({
-                    _id: '1',
-                    username: '1',
-                    palette: 'indigo',
-                    theme: 'light',
-                }),
-                contentType: 'application/json',
-            });
+            await route.fulfill(authorizeRequest());
         });
 
         await page.goto(client);
@@ -76,7 +68,7 @@ test.describe.parallel('Mobile navigation + burger menu', async () => {
     test('Closes the mobile menu when the Close button is clicked', async ({ page }) => {
         await page.setViewportSize({ width: 780, height: 500 });
         await page.route(server + loadAuthEndpoint, async (route) => {
-            await route.abort();
+            await route.fulfill(rejectRequest());
         });
 
         await page.goto(client);
@@ -92,7 +84,7 @@ test.describe.parallel('Mobile navigation + burger menu', async () => {
     test('Closes the menu when one of the links is clicked', async ({ page }) => {
         await page.setViewportSize({ width: 780, height: 500 });
         await page.route(server + loadAuthEndpoint, async (route) => {
-            await route.abort();
+            await route.fulfill(rejectRequest());
         });
 
         await page.goto(client);
@@ -110,7 +102,7 @@ test.describe.parallel('Mobile navigation + burger menu', async () => {
     test('Closes the menu when the overlay is clicked', async ({ page }) => {
         await page.setViewportSize({ width: 780, height: 500 });
         await page.route(server + loadAuthEndpoint, async (route) => {
-            await route.abort();
+            await route.fulfill(rejectRequest());
         });
 
         await page.goto(client);
