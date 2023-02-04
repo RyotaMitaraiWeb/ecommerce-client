@@ -55,7 +55,7 @@ export const productRoutes: RouteObject = {
                     url.searchParams.append('by', 'name');
                 }
 
-                const search = url.search;                
+                const search = url.search;
 
                 const { data } = await get('/product/search' + search);
                 return data;
@@ -69,15 +69,19 @@ export const productRoutes: RouteObject = {
         },
         {
             path: ':id',
-            element: <ProductDetails />,
-            loader: async ({ params }) => {
-                const id = params['id'];
-                const { res, data } = await get<IProductDetails>(`/product/${id}`);
-                
-                return redirectViaStatus(res.status) || data;
-            },
             children: [
                 {
+                    path: '',
+                    element: <ProductDetails />,
+                    loader: async ({ params }) => {
+                        const id = params['id'];
+                        const { res, data } = await get<IProductDetails>(`/product/${id}`);
+    
+                        return redirectViaStatus(res.status) || data;
+                    },
+                },
+                {
+    
                     path: 'delete',
                     element: null,
                     loader: async ({ params }) => {
@@ -90,49 +94,49 @@ export const productRoutes: RouteObject = {
                                 message: data[0].msg,
                                 severity: 'error',
                             });
-
+    
                             return redirectViaStatus(res.status, true);
                         } else {
                             dispatchOutsideOfComponent(openSnackbar, {
                                 message: 'Deleted the product successfully!',
                                 severity: 'success',
                             });
-
+    
                             return redirect('/');
                         }
                     },
                 },
+                {
+                    path: 'edit',
+                    element: <EditProduct />,
+                    loader: ownerGuard,
+                },
+                {
+                    path: 'buy',
+                    element: null,
+                    loader: async ({ params }) => {
+                        const id = params['id'];
+                        // data will be either an object with id of the deleted product or an array of errors
+                        // so just type it as an error object in this case
+                        const { res, data } = await post<IError[]>(`/product/${id}/buy`);
+                        if (!res.ok) {
+                            dispatchOutsideOfComponent(openSnackbar, {
+                                message: data[0].msg,
+                                severity: 'error',
+                            });
+    
+                            return redirectViaStatus(res.status, true);
+                        } else {
+                            dispatchOutsideOfComponent(openSnackbar, {
+                                message: 'Successful purchase!',
+                                severity: 'success',
+                            });
+    
+                            return redirect(`/product/${id}`);
+                        }
+                    },
+                },
             ]
-        },
-        {
-            path: ':id/edit',
-            element: <EditProduct />,
-            loader: ownerGuard,
-        },
-        {
-            path: ':id/buy',
-            element: null,
-            loader: async ({ params }) => {
-                const id = params['id'];
-                // data will be either an object with id of the deleted product or an array of errors
-                // so just type it as an error object in this case
-                const { res, data } = await post<IError[]>(`/product/${id}/buy`);
-                if (!res.ok) {
-                    dispatchOutsideOfComponent(openSnackbar, {
-                        message: data[0].msg,
-                        severity: 'error',
-                    });
-
-                    return redirectViaStatus(res.status, true);
-                } else {
-                    dispatchOutsideOfComponent(openSnackbar, {
-                        message: 'Successful purchase!',
-                        severity: 'success',
-                    });
-
-                    return redirect(`/product/${id}`);
-                }
-            },
         },
     ],
 };
