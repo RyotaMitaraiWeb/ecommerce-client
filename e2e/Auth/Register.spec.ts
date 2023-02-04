@@ -10,7 +10,7 @@ const server = 'http://localhost:5000';
 const loadAuthEndpoint = '/user';
 
 test.describe.parallel('Register', async () => {
-    test('Submit button is disabled if at least one field is empty and enabled when both are active', async ({ page }) => {
+    test('Submit button is disabled if at least one field is empty and enabled when both are filled', async ({ page }) => {
         await page.route(server + loadAuthEndpoint, async (route) => {
             await route.fulfill(rejectRequest());
         });
